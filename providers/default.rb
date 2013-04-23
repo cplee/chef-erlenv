@@ -41,7 +41,7 @@ action :create do
 # prepend .erlenv/bin to path if it exists and init erlenv
 
 if [ -d "${HOME}/.erlenv/bin" ]; then
-  export PATH="${erlenv_root}/bin:$PATH"
+  export PATH="${HOME}/.erlenv/bin:$PATH"
   eval "$(erlenv init -)"
 fi
 EOS
