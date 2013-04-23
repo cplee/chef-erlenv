@@ -29,9 +29,7 @@ action :run do
   converge_by("Rehash erlenv shims") do
     bash "rehash" do
       user new_resource.user
-      code <<-EOS
-erlenv rehash
-EOS
+      code %{erlenv rehash}
     end
   end
 end
