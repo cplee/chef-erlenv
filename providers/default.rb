@@ -33,4 +33,17 @@ action :create do
     group "admin"
     action :sync
   end
+  
+  file "etc/profile.d/erlenv.sh" do
+    owner username
+    group "admin"
+    content <<-EOS
+# prepend .erlenv/bin to path if it exists and init erlenv
+
+if [ -d "${HOME}/.erlenv/bin" ]; then
+  export PATH="${erlenv_root}/bin:$PATH"
+  eval "$(erlenv init -)"
+fi
+EOS
+  end
 end
