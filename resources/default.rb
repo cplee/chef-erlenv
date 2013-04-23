@@ -25,4 +25,6 @@ actions :create
 
 default_action :create
 
-attribute :user, :kind_of => String, :name_attribute => true 
+attribute :user, :kind_of => String, :name_attribute => true
+attribute :git_repo, :kind_of => String, :default => "git://github.com/talentdeficit/erlenv.git"
+attribute :version, :kind_of => String, :default => "HEAD"

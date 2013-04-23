@@ -26,8 +26,8 @@ action :create do
   userhome = "/home/#{username}"
   
   git "erlenv" do
-    repository "git://github.com/talentdeficit/erlenv.git"
-    reference "master"
+    repository new_resource.git_repo
+    reference new_resource.version
     destination "#{userhome}/.erlenv"
     user username
     group "admin"
