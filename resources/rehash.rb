@@ -26,3 +26,5 @@ actions :run
 default_action :run
 
 attribute :user, :kind_of => String, :name_attribute => true
+
+attr_accessor :exists
