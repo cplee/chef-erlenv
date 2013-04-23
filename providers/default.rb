@@ -23,6 +23,7 @@
 
 action :create do
   username = new_resource.user
+  userhome = "/home/#{username}"
   
   git "erlenv" do
     repository "git://github.com/talentdeficit/erlenv.git"
