@@ -58,7 +58,7 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::Erlenv.new(@new_resource.name)
 
-  if ::File.directory? "/home/#{new_resource.user}/.erlenv"
+  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
     @current_resource.exists = true
   end
 end
