@@ -26,27 +26,40 @@ def whyrun_supported?
 end
 
 action :create do
-  converge_by("Create erlenv") do
-    git "erlenv" do
-      repository new_resource.git_repo
-      reference new_resource.version
-      destination "/home/#{new_resource.user}/.erlenv"
-      user new_resource.user
-      group "admin"
-      action :sync
-    end
+  if @current_resource.exists
+    Chef::Log.info "#{new_resource} already exists"
+  else
+    converge_by("Create erlenv") do
+      git "erlenv" do
+        repository new_resource.git_repo
+        reference new_resource.version
+        destination "/home/#{new_resource.user}/.erlenv"
+        user new_resource.user
+        group "admin"
+        action :sync
+      end
 
-    file "etc/profile.d/erlenv.sh" do
-      owner new_resource.user
-      group "admin"
-      content <<-EOS
-  # prepend .erlenv/bin to path if it exists and init erlenv
+      file "etc/profile.d/erlenv.sh" do
+        owner new_resource.user
+        group "admin"
+        content <<-EOS
+    # prepend .erlenv/bin to path if it exists and init erlenv
 
-  if [ -d "${HOME}/.erlenv/bin" ]; then
-    export PATH="${HOME}/.erlenv/bin:$PATH"
-    eval "$(erlenv init -)"
-  fi
-  EOS
+    if [ -d "${HOME}/.erlenv/bin" ]; then
+      export PATH="${HOME}/.erlenv/bin:$PATH"
+      eval "$(erlenv init -)"
+    fi
+    EOS
+      end
     end
   end
 end
+
+def load_current_resource
+  @current_resource = Chef::Resource::Erlenv.new(@new_resource.name)
+
+  if ::File.directory? "/home/#{new_resource.user}/.erlenv"
+    @current_resource.exists = true
+  end
+end
+
