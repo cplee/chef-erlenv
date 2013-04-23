@@ -21,29 +21,32 @@
 # THE SOFTWARE.
 
 
-action :create do
-  username = new_resource.user
-  userhome = "/home/#{username}"
-  
-  git "erlenv" do
-    repository new_resource.git_repo
-    reference new_resource.version
-    destination "#{userhome}/.erlenv"
-    user username
-    group "admin"
-    action :sync
-  end
-  
-  file "etc/profile.d/erlenv.sh" do
-    owner username
-    group "admin"
-    content <<-EOS
-# prepend .erlenv/bin to path if it exists and init erlenv
+def whyrun_supported?
+  true
+end
 
-if [ -d "${HOME}/.erlenv/bin" ]; then
-  export PATH="${HOME}/.erlenv/bin:$PATH"
-  eval "$(erlenv init -)"
-fi
-EOS
+action :create do
+  converge_by("Create erlenv") do
+    git "erlenv" do
+      repository new_resource.git_repo
+      reference new_resource.version
+      destination "/home/#{new_resource.user}/.erlenv"
+      user new_resource.user
+      group "admin"
+      action :sync
+    end
+
+    file "etc/profile.d/erlenv.sh" do
+      owner new_resource.user
+      group "admin"
+      content <<-EOS
+  # prepend .erlenv/bin to path if it exists and init erlenv
+
+  if [ -d "${HOME}/.erlenv/bin" ]; then
+    export PATH="${HOME}/.erlenv/bin:$PATH"
+    eval "$(erlenv init -)"
+  fi
+  EOS
+    end
   end
 end
