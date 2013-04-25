@@ -26,7 +26,7 @@ def whyrun_supported?
 end
 
 action :create do
-  if @current_resource.exists
+  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
     Chef::Log.info "#{new_resource} already exists"
   else
     converge_by("Create erlenv") do
@@ -52,14 +52,6 @@ action :create do
     EOS
       end
     end
-  end
-end
-
-def load_current_resource
-  @current_resource = Chef::Resource::Erlenv.new(@new_resource.name)
-
-  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
-    @current_resource.exists = true
   end
 end
 

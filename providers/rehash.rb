@@ -26,7 +26,7 @@ def whyrun_supported?
 end
 
 action :run do
-  if @current_resource.exists
+  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
     converge_by("Rehash erlenv shims") do
       bash "rehash" do
         user new_resource.user
@@ -36,10 +36,3 @@ action :run do
   end
 end
 
-def load_current_resource
-  @current_resource = Chef::Resource::ErlenvRehash.new(@new_resource.name)
-
-  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
-    @current_resource.exists = true
-  end
-end
