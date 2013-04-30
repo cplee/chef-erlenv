@@ -25,6 +25,8 @@ default['erlenv']['version'] = "HEAD"
 
 default['erlenv']['installdir'] = false
 
+default['erlenv']['users'] = []
+
 case platform
 when "redhat", "centos", "fedora", "amazon",
     "scientific", "debian", "ubuntu", "suse"

@@ -25,6 +25,6 @@ actions :create
 default_action :create
 
 attribute :user, :kind_of => String, :name_attribute => true
-attribute :destination, :kind_of => String, :default => ".erlenv"
+attribute :destination, :kind_of => String
 attribute :git_url, :kind_of => String
 attribute :version, :kind_of => String

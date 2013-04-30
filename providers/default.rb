@@ -26,10 +26,10 @@ def whyrun_supported?
 end
 
 action :create do  
-  installdir = node['erlenv']['installdir'] || ::File.join(
+  installdir = node['erlenv']['installdir'] || new_resource.destination || ::File.join(
     node['erlenv']['user_home'],
     new_resource.user,
-    new_resource.destination
+    ".erlenv"
   )
 
   git_url = new_resource.git_url || node['erlenv']['git_url']

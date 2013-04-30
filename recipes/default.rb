@@ -22,3 +22,23 @@
 
 
 include_recipe "git"
+
+Array(node['erlenv']['users']).each do |u|
+  git_url = u['git_url'] || node['erlenv']['git_url']
+  version = u['version'] || node['erlenv']['version']
+  homedir = u['homedir'] || ::File.join(
+    node['erlenv']['user_home'],
+    u['user']
+  )
+  installdir = u['installdir'] || ::File.join(
+    homedir,
+    ".erlenv"
+  )
+  
+  erlenv u['user'] do
+    destination installdir
+    git_url git_url
+    version version
+  end
+  
+end
