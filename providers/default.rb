@@ -53,9 +53,9 @@ action :create do
           owner new_resource.user
           group "admin"
           content <<-EOS
-# prepend .erlenv/bin to path if it exists and init erlenv
+# prepend .erlenv/bin to path and init erlenv
 
-if [ -d "#{installdir}/bin" ]; then
+if [ "$(id -u)" -eq "$(stat -c "%u" $0)" ]; then
   export PATH="#{installdir}/bin:$PATH"
   eval "$(erlenv init -)"
 fi
