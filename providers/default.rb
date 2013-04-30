@@ -25,31 +25,42 @@ def whyrun_supported?
   true
 end
 
-action :create do
-  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
+action :create do  
+  installdir = node['erlenv']['installdir'] || ::File.join(
+    node['erlenv']['user_home'],
+    new_resource.user,
+    new_resource.destination
+  )
+
+  git_url = new_resource.git_url || node['erlenv']['git_url']
+  version = new_resource.version || node['erlenv']['version']
+  
+  if ::File.directory? "#{installdir}/bin"
     Chef::Log.info "#{new_resource} already exists"
   else
     converge_by("Create erlenv") do
       git "erlenv" do
-        repository new_resource.git_repo
-        reference new_resource.version
-        destination "/home/#{new_resource.user}/.erlenv"
+        repository git_url
+        reference version
+        destination installdir
         user new_resource.user
         group "admin"
         action :sync
       end
 
-      file "etc/profile.d/erlenv.sh" do
-        owner new_resource.user
-        group "admin"
-        content <<-EOS
-    # prepend .erlenv/bin to path if it exists and init erlenv
+      if node['erlenv']['create_profiled']
+        file "etc/profile.d/erlenv.sh" do
+          owner new_resource.user
+          group "admin"
+          content <<-EOS
+# prepend .erlenv/bin to path if it exists and init erlenv
 
-    if [ -d "${HOME}/.erlenv/bin" ]; then
-      export PATH="${HOME}/.erlenv/bin:$PATH"
-      eval "$(erlenv init -)"
-    fi
-    EOS
+if [ -d "#{installdir}/bin" ]; then
+  export PATH="#{installdir}/bin:$PATH"
+  eval "$(erlenv init -)"
+fi
+EOS
+        end
       end
     end
   end

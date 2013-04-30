@@ -20,21 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-name "erlenv"
-maintainer "alisdair sullivan"
-maintainer_email "alisdairsullivan@yahoo.ca"
-license "MIT"
-description "a chef recipe for installing erlenv"
-version "0.1"
+default['erlenv']['git_url'] = "http://github.com/talentdeficit/erlenv"
+default['erlenv']['version'] = "HEAD"
 
-depends "git"
+default['erlenv']['installdir'] = false
 
-supports "redhat"
-supports "centos"
-supports "fedora"
-supports "amazon"
-supports "scientific"
-supports "debian"
-supports "ubuntu"
-supports "suse"
-supports "mac_os_x"
+case platform
+when "redhat", "centos", "fedora", "amazon",
+    "scientific", "debian", "ubuntu", "suse"
+  default['erlenv']['user_home'] = '/home'
+  default['erlenv']['create_profiled'] = true
+when "mac_os_x"
+  default['erlenv']['user_home'] = '/Users'
+  default['erlenv']['create_profiled'] = false
+end

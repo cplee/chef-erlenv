@@ -20,13 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
 actions :create
 
 default_action :create
 
 attribute :user, :kind_of => String, :name_attribute => true
-attribute :git_repo, :kind_of => String, :default => "git://github.com/talentdeficit/erlenv.git"
-attribute :version, :kind_of => String, :default => "HEAD"
-
-attr_accessor :exists
+attribute :destination, :kind_of => String, :default => ".erlenv"
+attribute :git_url, :kind_of => String
+attribute :version, :kind_of => String

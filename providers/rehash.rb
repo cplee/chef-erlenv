@@ -26,12 +26,10 @@ def whyrun_supported?
 end
 
 action :run do
-  if ::File.directory? "/home/#{new_resource.user}/.erlenv/bin"
-    converge_by("Rehash erlenv shims") do
-      bash "rehash" do
-        user new_resource.user
-        code %{erlenv rehash}
-      end
+  converge_by("Rehash erlenv shims") do
+    bash "rehash" do
+      user new_resource.user
+      code %{erlenv rehash}
     end
   end
 end
