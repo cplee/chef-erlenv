@@ -49,13 +49,13 @@ action :create do
       end
 
       if node['erlenv']['create_profiled']
-        file "etc/profile.d/erlenv.sh" do
+        file "etc/profile.d/erlenv-#{new_resource.user}.sh" do
           owner new_resource.user
           group "admin"
           content <<-EOS
 # prepend .erlenv/bin to path and init erlenv
 
-if [ "$(id -u)" -eq "$(stat -c "%u" $0)" ]; then
+if [ "$(id -u)" -eq "$(stat -c "%u" #{installdir}/bin)" ]; then
   export PATH="#{installdir}/bin:$PATH"
   eval "$(erlenv init -)"
 fi
