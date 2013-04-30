@@ -2,6 +2,36 @@
 
 a chef recipe for erlenv
 
+## usage ##
+
+### installing erlenv for a specific user ###
+
+currently only per-user installs are supported
+
+include `recipe[erlenv]` in your `run_list` and add a user hash to the `users`
+attribute list. for example:
+
+```ruby
+node.default['erlenv']['users'] = [
+	{ 
+		'user' => 'anonymous'
+	}
+]
+```
+
+this will install `erlenv` in the default location (`~/.erlenv`) and, on linux
+platforms, add an init script to `etc/profile.d` to add `erlenv` to the user path
+and initialize it
+
+the following attributes are also available to modify:
+
+* `installdir`
+  the dir to install `erlenv` to
+* `git_url`
+  the url of the git repository to clone `erlenv` from
+* `version`
+  a git reference to install, defaults to `HEAD` 
+
 ## license ##
 
 The MIT License (MIT)
