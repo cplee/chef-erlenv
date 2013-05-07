@@ -25,6 +25,7 @@ actions :create
 default_action :create
 
 attribute :user, :kind_of => String, :name_attribute => true
+attribute :group, :kind_of => String
 attribute :destination, :kind_of => String
 attribute :git_url, :kind_of => String
 attribute :version, :kind_of => String

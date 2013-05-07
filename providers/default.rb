@@ -25,7 +25,7 @@ def whyrun_supported?
   true
 end
 
-action :create do  
+action :create do 
   installdir = node['erlenv']['installdir'] || new_resource.destination || ::File.join(
     node['erlenv']['user_home'],
     new_resource.user,
@@ -34,6 +34,8 @@ action :create do
 
   git_url = new_resource.git_url || node['erlenv']['git_url']
   version = new_resource.version || node['erlenv']['version']
+  
+  group = new_resource.group || node['erlenv']['group'] || nil
   
   if ::File.directory? "#{installdir}/bin"
     Chef::Log.info "#{new_resource} already exists"
@@ -44,14 +46,14 @@ action :create do
         reference version
         destination installdir
         user new_resource.user
-        group "admin"
+        group group
         action :sync
       end
 
       if node['erlenv']['create_profiled']
         file "etc/profile.d/erlenv-#{new_resource.user}.sh" do
           owner new_resource.user
-          group "admin"
+          group group
           content <<-EOS
 # prepend .erlenv/bin to path and init erlenv
 
